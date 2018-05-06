@@ -25,17 +25,6 @@ RUN wget http://www-us.apache.org/dist/kafka/1.0.0/kafka_2.11-1.0.0.tgz && \
     mv kafka_2.11-1.0.0 /usr/local/kafka && \
     rm kafka_2.11-1.0.0.tgz
 
-# install hbase
-RUN wget http://www-eu.apache.org/dist/hbase/1.4.3/hbase-1.4.3-bin.tar.gz && \
-    tar -zxvf hbase-1.4.3-bin.tar.gz && \
-    mv hbase-1.4.3 /usr/local/hbase && \
-    rm hbase-1.4.3-bin.tar.gz
-
-# copy the test files
-RUN wget https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/purchases.txt && \
-    wget https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/purchases2.txt 
-
-
 # set environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
 ENV HADOOP_HOME=/usr/local/hadoop 
@@ -45,7 +34,7 @@ ENV HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
 ENV LD_LIBRARY_PATH=/usr/local/hadoop/lib/native:$LD_LIBRARY_PATH
 ENV HBASE_HOME=/usr/local/hbase
 ENV CLASSPATH=$CLASSPATH:/usr/local/hbase/lib/*
-ENV PATH=$PATH:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/spark/bin:/usr/local/kafka/bin:/usr/local/hbase/bin 
+ENV PATH=$PATH:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/spark/bin:/usr/local/kafka/bin 
 
 # ssh without key
 RUN ssh-keygen -t rsa -f ~/.ssh/id_rsa -P '' && \
@@ -67,9 +56,7 @@ RUN mv /tmp/ssh_config ~/.ssh/config && \
     mv /tmp/start-kafka-zookeeper.sh ~/start-kafka-zookeeper.sh && \
     mv /tmp/start-hadoop.sh ~/start-hadoop.sh && \
     mv /tmp/run-wordcount.sh ~/run-wordcount.sh && \
-    mv /tmp/spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf && \
-    mv /tmp/hbase-env.sh $HBASE_HOME/conf/hbase-env.sh && \
-    mv /tmp/hbase-site.xml $HBASE_HOME/conf/hbase-site.xml
+    mv /tmp/spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf && 
 
 RUN chmod +x ~/start-hadoop.sh && \
     chmod +x ~/start-kafka-zookeeper.sh && \
